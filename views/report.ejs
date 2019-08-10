@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html dir="rtl">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>دشوری! - راهنمای دستشویی های عمومی</title>
+    <link rel="stylesheet" href="/stylesheets/menu-styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css"
+          integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/iranian-sans" type="text/css"/>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+<div id='cssmenu'>
+    <ul>
+        <li style="float: right"><a href='/'>صفحه اصلی</a></li>
+        <li style="float: right"><a href='/about'>این چیه؟</a></li>
+        <li class='active' style="float: right"><a href='/report'>گزارش</a></li>
+    </ul>
+</div>
+<div class="pure-g high-level-container">
+    <div class="pure-u-1-5"></div>
+    <div class="pure-u-3-5 ">
+        <div class="pure-g ">
+            <div class="pure-u-2-5">
+                <form class="pure-form pure-form-stacked" method="post" action="/report/location">
+                    <fieldset>
+                        <legend>یک "دشوری" می‌شناسید که در نقشه مشاهده نمی‌کنید؟ لطفا مکان آن را به ما اطلاع دهید.
+                        </legend>
+
+                        <label for="lat">طول جغرافیایی</label>
+                        <input id="lat" name="lat">
+
+                        <label for="long">عرض جغرافیایی</label>
+                        <input id="long" name="long">
+
+                        <label for="link">لینک به نقطه (در نقشه گوگل یا نرم افزارهای مشابه)</label>
+                        <input id="link" name="link">
+                        <label for="name"> نام مکان</label>
+                        <input id="name" name="name">
+
+                        <button type="submit" class="pure-button pure-button-primary">ارسال</button>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="pure-u-1-5"></div>
+            <div class="pure-u-2-5">
+                <form class="pure-form pure-form-stacked">
+                    <fieldset>
+                        <legend> نظر/پیشنهاد/انتقاد دارید؟ بنویسید و ارسال کنید.</legend>
+                        <label for="name">نام</label>
+                        <input id="name" name="name">
+                        <label for="handle">راه ارتباطی (ایمیل، تلگرام، توییتر ...)</label>
+                        <input id="handle" name="handle">
+                        <label for="name">متن</label>
+                        <textarea class="pure-input-1-2"></textarea>
+                        <button type="submit" class="pure-button pure-button-primary">ارسال</button>
+                        <span style="color: red;font-size: xx-small;display: block">توجه : آی پی شما ذخیره خواهد شد.</span>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="pure-u-1-5"></div>
+</div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="/javascripts/menu-script.js" charset="utf-8"></script>
+</html>

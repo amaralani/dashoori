@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html>
 
+<html dir="rtl">
 <head>
     <title>دشوری! - راهنمای دستشویی های عمومی</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="stylesheet" href="/stylesheets/menu-styles.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-          crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css"/>
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/iranian-sans" type="text/css"/>
 
     <style>
         #map {
             height: 100%;
+            min-height: 90vh;
         }
     </style>
 </head>
@@ -20,16 +21,98 @@
 <body>
 <div id='cssmenu'>
     <ul>
-        <li class='active' style="float: right"><a href='#'>صفحه اصلی</a></li>
+        <li class='active' style="float: right"><a href='/'>صفحه اصلی</a></li>
         <li style="float: right"><a href='/about'>این چیه؟</a></li>
         <li style="float: right"><a href='/report'>گزارش</a></li>
     </ul>
 </div>
-<div>
-    Content
+<div class="pure-g">
+<div class="pure-u-1-1" id="map"></div>
 </div>
 </body>
 
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+        crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" charset="utf-8"></script>
-<script src="/javascripts/menu-script.js" charset="utf-8"></script>
+
+
+<script>
+    let currentLat = 35.6892;
+    let currentLong = 51.3890;
+    let mymap;
+    let locateControl = L.control.locate();
+    let markerLayerGroup = L.layerGroup();
+
+    const createMarker = (lat, long, name) => {
+        L.marker([lat, long]).bindPopup(name).addTo(markerLayerGroup);
+    };
+
+    const refreshMarkers = (list) => {
+        markerLayerGroup.clearLayers();
+        L.circle([currentLat, currentLong], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 1500
+        }).addTo(markerLayerGroup);
+        for (let i = 0; i < list.length; i++) {
+            createMarker(list[i].lat, list[i].long, list[i].name);
+        }
+    };
+
+    const onMapClick = (e) => {
+        currentLat = e.latlng.lat;
+        currentLong = e.latlng.lng;
+
+        $.ajax({
+                url: "/api/toilets",
+                method: "GET",
+                data: {"latitude": currentLat, "longitude": currentLong},
+            }
+        )
+            .done((response) => {
+                let toilets = response.toilets;
+                if (toilets) {
+                    refreshMarkers(toilets);
+                }
+            })
+            .fail((err) => {
+                console.log(`Status ${err.status} : ${err.statusText}`);
+            });
+    };
+
+    const generateMap = (lat, long) => {
+
+        mymap = L.map('map').setView([lat, long], 13);
+        L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png ', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18
+        }).addTo(mymap);
+        locateControl.addTo(mymap);
+        locateControl.start();
+        markerLayerGroup.addTo(mymap);
+        console.log("huh?")
+        mymap.on('click', onMapClick);
+    };
+
+    $(document).ready(function () {
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+
+                currentLat = position.coords.latitude;
+                currentLong = position.coords.longitude;
+                generateMap(currentLat, currentLong);
+            },
+            () => {
+                console.log("err?")
+                // Error ==> set location to tehran
+                currentLat = 35.6892;
+                currentLong = 51.3890;
+                generateMap(currentLat, currentLong);
+            });
+    });
+</script>
+<!--<script src="/javascripts/menu-script.js" charset="utf-8"></script>-->
 </html>
