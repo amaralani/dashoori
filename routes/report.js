@@ -21,11 +21,6 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/location', function (req, res, next) {
-    // todo : get location from request and set location in db
-    console.log(req.body.lat);
-    console.log(req.body.long);
-    console.log(req.body.link);
-    console.log(req.body.name);
     db.query("create table IF NOT EXISTS toilets_review (latitude double, longitude double, link varchar(255) ,name varchar(255));", (err, result) => {
         if (err) throw err;
     });
